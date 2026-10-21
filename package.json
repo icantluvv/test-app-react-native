@@ -1,25 +1,34 @@
 {
   "name": "matches-task",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "api",
+    "packages/api"
+  ],
   "main": "index.ts",
-  "dependencies": {
-    "expo": "~57.0.29",
-    "expo-status-bar": "~57.0.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-native": "0.86.3",
-    "react-native-web": "^0.21.2"
-  },
-  "devDependencies": {
-    "@types/react": "~19.2.2",
-    "typescript": "~6.0.3"
-  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "api:lint": "npm run lint --workspace=@repo/api-spec",
+    "api:bundle": "npm run bundle --workspace=@repo/api-spec",
+    "api:generate": "npm run generate --workspace=@repo/api"
   },
-  "private": true
+  "dependencies": {
+    "@tanstack/react-query": "5.104.5",
+    "expo": "~57.0.29",
+    "expo-status-bar": "~57.0.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-web": "^0.21.2",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~6.0.3"
+  }
 }
