@@ -5,12 +5,16 @@ import { useState } from 'react'
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { UpdatedAgo } from '../components/UpdatedAgo'
+import { useFavorites } from '../hooks/useFavorites'
 import { MatchCard, MatchesSkeleton } from './matches/MatchCard'
 import { MatchesEmptyState } from './matches/MatchesEmptyState'
 import { filterMatches, filters } from './matches/presentation'
 
 export function MatchesScreen() {
 	const query = useGetMatches()
+	// Для сервера есть generated useSetMatchFavorite; в тестовом задании без backend
+	// избранное сохраняется только в localStorage.
+	const { favorites, isFavorite, toggle, storageError } = useFavorites()
 	const [filter, setFilter] = useState<MatchesFilter>('all')
 	const matches = query.data ? filterMatches(query.data.matches, filter) : []
 
@@ -20,8 +24,15 @@ export function MatchesScreen() {
 			contentContainerStyle={styles.content}
 			contentInsetAdjustmentBehavior="automatic"
 			data={matches}
+			extraData={favorites}
 			keyExtractor={(match) => match.id}
-			renderItem={({ item }) => <MatchCard match={item} />}
+			renderItem={({ item }) => (
+				<MatchCard
+					match={item}
+					active={isFavorite(item.id)}
+					onFavoritePress={() => toggle(item.id)}
+				/>
+			)}
 			ListHeaderComponent={
 				<View style={styles.header}>
 					<Text style={styles.title}>
@@ -65,6 +76,12 @@ export function MatchesScreen() {
 							<UpdatedAgo since={new Date(query.dataUpdatedAt)} />
 						)}
 					</View>
+					{storageError && (
+						<Text selectable accessibilityRole="alert" style={styles.error}>
+							Не удалось сохранить избранное на устройстве. Выбор будет доступен
+							только до закрытия экрана.
+						</Text>
+					)}
 					{query.isError && (
 						<Text selectable accessibilityRole="alert" style={styles.error}>
 							{query.data === undefined

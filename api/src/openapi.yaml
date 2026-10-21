@@ -2,16 +2,20 @@ openapi: 3.0.3
 info:
     title: Matches API
     version: 0.1.0
-    description: Read-only contract for the configured matches JSON source.
+    description: Matches JSON source and a planned favorites API contract.
 servers:
     - url: https://raw.githubusercontent.com
 security: []
 tags:
     - name: Matches
       description: Matches of the current round.
+    - name: Favorites
+      description: Planned favorite operations. The app currently stores favorites locally.
 paths:
     /OWNER/REPO/main/data/matches.json:
         $ref: ./paths/matches.yaml
+    /favorites/{matchId}:
+        $ref: ./paths/favorite.yaml
 components:
     schemas:
         Team:
@@ -24,3 +28,9 @@ components:
             $ref: ./components/schemas/Match.yaml
         MatchesResponse:
             $ref: ./components/schemas/MatchesResponse.yaml
+        SetMatchFavoriteRequest:
+            $ref: ./components/schemas/SetMatchFavoriteRequest.yaml
+        MatchFavorite:
+            $ref: ./components/schemas/MatchFavorite.yaml
+        ApiError:
+            $ref: ./components/schemas/ApiError.yaml

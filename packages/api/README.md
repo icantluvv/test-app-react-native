@@ -30,6 +30,16 @@ npm run typecheck
 Use Node >=22.12 for Kubb. Plugin versions are independent and pinned in the
 workspace manifest; all dependencies resolve through the root package-lock.json.
 
+## Planned favorites operation
+
+`setMatchFavorite`, `setMatchFavoriteMutationKey`, `setMatchFavoriteMutationOptions`
+and `useSetMatchFavorite` are generated from PUT /favorites/{matchId} and exported
+through @repo/api with request/response types and schemas. No favorites backend
+exists yet. The app does not call the mutation and has no mock mutation route;
+useFavorites stores ID strings locally. A future backend integration needs an
+explicit implementation and configured backend URL; changing mock mode alone
+does not switch favorite storage to the server.
+
 ## Expo integration when an endpoint is added
 
 - Mount one stable `QueryClient` with `QueryClientProvider` in `App.tsx`.

@@ -1,0 +1,6 @@
+type: object
+required: [isFavorite]
+properties:
+    isFavorite:
+        type: boolean
+        description: True adds the match to favorites; false removes it.

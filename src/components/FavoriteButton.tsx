@@ -12,6 +12,8 @@ export function FavoriteButton({ active, onPress }: Props) {
 			onPress={onPress}
 			hitSlop={12}
 			accessibilityRole="button"
+			aria-selected={active}
+			style={styles.button}
 			accessibilityLabel={active ? 'Убрать из избранного' : 'Добавить в избранное'}
 		>
 			<Text style={[styles.star, active && styles.active]}>{active ? '★' : '☆'}</Text>
@@ -20,6 +22,7 @@ export function FavoriteButton({ active, onPress }: Props) {
 }
 
 const styles = StyleSheet.create({
+	button: { width: 24, height: 24, alignItems: 'center', justifyContent: 'center' },
 	star: {
 		fontSize: 22,
 		color: '#9ca3af',

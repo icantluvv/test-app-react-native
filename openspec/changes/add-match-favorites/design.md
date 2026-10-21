@@ -1,0 +1,39 @@
+## Context
+
+См. proposal.md. Expo ~57.0.29, React 19, React Native 0.86; один экран с FlatList и generated useGetMatches. FavoriteButton уже управляется через active/onPress. useFavorites использует Boolean(indexOf(id)), поэтому -1 превращается в true, а 0 — в false; push/splice мутируют state, setFavorites получает прежнюю ссылку. UpdatedAgo уже вычисляет возраст от since, очищает interval/AppState subscription и поддерживает минуты: это исправление предыдущего change.
+
+## Goals / Non-Goals
+
+**Goals:** один источник избранного на экране, независимость по id, сохранение на устройстве между перезапусками, работа в Expo Go и web, краткое объяснение исходных ошибок.
+
+**Non-Goals:** вызов server mutations из UI, хранение копий матчей, синхронизация устройств или вкладок, авторизация, persistence query cache, новый state framework и переписывание исправленного таймера.
+
+## Decisions
+
+1. Один вызов useFavorites в MatchesScreen. Передавать active и обработчик конкретного id в MatchCard/FavoriteButton. Хранить string[]: includes для membership, setFavorites(prev => prev.includes(id) ? prev.filter(...) : [...prev, id]) для неизменяемого переключения. Функциональный updater остаётся чистым, без записи в storage. Это устраняет -1/0, пропуск рендера и потерю быстрых переключений. Отдельный hook в каждой карточке создавал бы несвязанные состояния; общий внешний store для одного экрана не нужен.
+2. Установить expo-sqlite через npx expo install expo-sqlite и импортировать expo-sqlite/localStorage/install в entrypoint до регистрации приложения. По документации SDK 57 импорт на web является no-op: используется localStorage браузера; на native — SQLite polyfill, включённый в Expo Go. Использовать один ключ matches:favorites:v1, объявленный внутри useFavorites без отдельного файла констант, и JSON-массив уникальных строк. Полные карточки не сохранять. Документация: https://docs.expo.dev/versions/v57.0.0/sdk/sqlite/#the-localstorage-api . AsyncStorage или SQL-таблицы для этой задачи не нужны.
+3. Восстанавливать избранное синхронно при инициализации state, до первого отображения кнопок. Не записывать стартовый пустой массив поверх сохранённых ID. Отсутствующий ключ означает пустой список; JSON разбирать как unknown, проверять массив строк и нормализовать дубли. Повреждённое значение означает пустой список без падения; восстановление затрагивает только собственный ключ. Сохранять актуальный массив в effect после изменения state; синхронный localStorage не создаёт гонок асинхронных записей. Перезапуск браузера сохраняет выбор в рамках того же origin; закрытие native приложения — в данных приложения.
+4. Ошибки чтения/записи localStorage перехватывать. Экран остаётся рабочим с текущим React state и неблокирующим сообщением о невозможности гарантировать сохранение после закрытия; не выдавать ошибку storage за ошибку API. Не добавлять ручной retry HTTP или менять cache policy. Очистка данных приложения/сайта естественно удаляет избранное. ID, отсутствующий в очередном ответе матчей, не удалять автоматически: он может вернуться после refresh.
+5. Подключить existing FavoriteButton размером 24×24 в заголовок карточки рядом со статусом, с hitSlop=12, передать accessibilityState selected и сохранить существующие русские labels. Передать favorites через extraData FlatList, чтобы переключение обновляло карточки независимо от ссылки data. Skeleton использует ту же структуру заголовка и место под звезду, без интерактивной кнопки; добавить placeholder в общий layout, не отдельный дизайн skeleton.
+6. Подготовить будущий контракт одной идемпотентной операции PUT /favorites/{matchId}, operationId setMatchFavorite. Обязательный path parameter matchId — непустая строка; required application/json body SetMatchFavoriteRequest с обязательным isFavorite:boolean. true добавляет матч, false снимает выбор; повтор одного запроса сохраняет итоговое состояние. Ответ 200 — MatchFavorite с обязательными matchId и isFavorite. Ответы 400/404/500 — ApiError с code/message. Отдельные POST/DELETE и toggle без явного итогового состояния не нужны: одна операция покрывает оба действия без повторного переключения при retry. Это проектируемый контракт, а не существующая операция backend; не объявлять его реализованным сервером и не направлять записи на raw.githubusercontent.com.
+7. Добавить api/src/paths/favorite.yaml и api/src/components/schemas/SetMatchFavoriteRequest.yaml, MatchFavorite.yaml, ApiError.yaml; подключить $ref и tag Favorites в openapi.yaml. Существующая настройка Kubb генерирует types, Zod, Fetch function, mutation key/options и hook; экспортировать нужные artifacts через @repo/api. Проверить фактические generated имена/сигнатуры. Прогнать api:lint, api:bundle, api:generate, typecheck и повторную генерацию без изменений. Generated файлы не править вручную. Дополнительные mock routes для записи, ручной fetch, mutation wrapper и копия generated schemas не нужны.
+8. В MatchesScreen рядом с подключением useFavorites/обработчиком звезды оставить комментарий по-русски: для серверного сохранения есть generated useSetMatchFavorite, но в тестовом задании backend отсутствует и используется только localStorage. Не импортировать и не вызывать неиспользуемый hook; toggles не создают HTTP-запросы. После появления backend его подключение будет отдельной задачей: не обещать, что смена env переключит избранное на сервер.
+9. UpdatedAgo проверить по существующему поведению: рост возраста, сброс при успешном refetch с тем же JSON, сохранение since при ошибке, минуты после 59 секунд, возврат из фона и cleanup. Сохранить положение рядом с «Обновить». Не повторять выполненное исправление без подтверждённого дефекта. В SOLUTION.md для каждой жалобы дать 1–3 предложения: причина → исправление; для таймера указать, что оно уже выполнено ранее.
+
+## Risks / Trade-offs
+
+- [Storage недоступен или повреждён] → контролируемое восстановление, работа в памяти и понятное сообщение при ошибке доступа; не очищать чужие ключи.
+- [Новая зависимость] → установка только expo install, Expo Go smoke отдельно от web; development build не требуется по документации SDK 57.
+- [Частые нажатия] → функциональный updater и запись последнего committed state без побочных эффектов внутри updater.
+- [Длинные имена/статусы и крупный шрифт] → не перекрывать счёт, звезду и текст; сохранить геометрию loading/content.
+- [Тестовая инфраструктура отсутствует] → ручные проверки и обязательные static gates; не заявлять автоматическое покрытие.
+
+## Verification
+
+Без отдельного test-plan.md по инструкции пользователя. До исправления подтвердить -1/0 и мутацию массива. После — пустой storage, добавление/удаление первого и другого матча, независимость звёзд, серия быстрых нажатий с чётным/нечётным итогом, фильтры, refresh, прокрутка и перезапуск. Отдельно проверить повреждённый JSON, не-массив/нестроковые элементы/дубли и отказ storage через временный dev harness без production-зависимостей. Для таймера — рост, success/error reset, 59/60/119/120 секунд, фон и unmount. Выполнить браузер и доступный Expo Go; недоступные платформы и невыполненные сценарии явно записать в SOLUTION.md.
+
+Статические gates: scoped npx oxfmt и --check, npm run typecheck, openspec validate add-match-favorites --strict --no-interactive, git diff --check. Для нового контракта обязательны npm run api:lint, npm run api:bundle, npm run api:generate и повторная генерация без изменений output. Проверить schema/path $ref и публичные generated exports; переключение звезды не вызывает HTTP mutation. Runner, E2E suite и test-plan.md не создавать.
+
+## Migration Plan
+
+Новая локальная запись matches:favorites:v1 создаётся при использовании фичи; миграции backend нет. При откате вернуть hook, компоненты, entrypoint, зависимости, OpenAPI, generated artifacts, экспорты и документацию; оставшийся ключ не мешает прежнему приложению.

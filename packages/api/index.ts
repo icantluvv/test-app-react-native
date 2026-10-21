@@ -12,3 +12,19 @@ export {
 export type { Match, MatchStatusKey, MatchesResponse, Team, MatchScore } from './base/codegen/types'
 export { matchesResponseSchema } from './base/codegen/zod/matchesResponseSchema'
 export { matchSchema } from './base/codegen/zod/matchSchema'
+
+export { setMatchFavorite } from './base/codegen/clients/setMatchFavorite'
+export {
+	useSetMatchFavorite,
+	setMatchFavoriteMutationKey,
+	setMatchFavoriteMutationOptions,
+} from './base/codegen/hooks/useSetMatchFavorite'
+export type { ApiError } from './base/codegen/types/ApiError'
+export type { MatchFavorite } from './base/codegen/types/MatchFavorite'
+export type { SetMatchFavoriteRequest } from './base/codegen/types/SetMatchFavoriteRequest'
+export type {
+	SetMatchFavoriteOptions,
+	SetMatchFavoriteResponse,
+} from './base/codegen/types/SetMatchFavorite'
+export { setMatchFavoriteRequestSchema } from './base/codegen/zod/setMatchFavoriteRequestSchema'
+export { matchFavoriteSchema } from './base/codegen/zod/matchFavoriteSchema'

@@ -1,0 +1,47 @@
+put:
+    operationId: setMatchFavorite
+    summary: Set favorite state of a match
+    description: Planned backend operation. No backend is implemented yet; the test app stores favorites locally and does not call this operation. Repeating a request preserves the requested state.
+    tags: [Favorites]
+    servers:
+        - url: https://api.example.test
+          description: Placeholder for the future backend; not an implemented service.
+    parameters:
+        - name: matchId
+          in: path
+          required: true
+          description: Match identifier.
+          schema:
+              type: string
+              minLength: 1
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: ../components/schemas/SetMatchFavoriteRequest.yaml
+    responses:
+        '200':
+            description: Favorite state was set to the requested value.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/MatchFavorite.yaml
+        '400':
+            description: Invalid match identifier or request body.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/ApiError.yaml
+        '404':
+            description: Match not found.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/ApiError.yaml
+        '500':
+            description: Backend could not save the favorite state.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/ApiError.yaml
