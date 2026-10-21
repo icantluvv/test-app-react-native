@@ -1,7 +1,6 @@
 import type { ResolvedRequest } from './codegen/.kubb/client'
 
 import matchesData from '../../../data/matches.json'
-import { matchesResponseSchema } from './codegen/zod/matchesResponseSchema'
 
 export interface MockResponse {
 	data?: unknown
@@ -25,7 +24,7 @@ export const mockScenarios: Record<string, readonly MockRoute[]> = {
 			create: async () => {
 				// Simulate an asynchronous source so the loading state is visible.
 				await new Promise<void>((resolve) => setTimeout(resolve, 350))
-				return { data: matchesResponseSchema.parse(matchesData) }
+				return { data: matchesData }
 			},
 		},
 	],

@@ -9,7 +9,7 @@ import { client, withUnwrap } from '../.kubb/client'
 import { getMatchesResponseSchema, getMatchesErrorSchema } from '../zod/getMatchesSchema'
 
 /**
- * @description Fetch the JSON document configured by MATCHES_URL. Filtering is local.
+ * @description Fetch the matches JSON document. The client selects the server or mock mode via environment configuration. Filtering is local.
  * @summary Get matches of the current round
  * {@link /OWNER/REPO/main/data/matches.json}
  */

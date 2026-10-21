@@ -1,7 +1,7 @@
 get:
     operationId: getMatches
     summary: Get matches of the current round
-    description: Fetch the JSON document configured by MATCHES_URL. Filtering is local.
+    description: Fetch the matches JSON document. The client selects the server or mock mode via environment configuration. Filtering is local.
     tags: [Matches]
     responses:
         '200':

@@ -4,7 +4,7 @@
 
 ## What Changes
 
-- OpenAPI-контракт JSON-источника MATCHES_URL: GET-путь и component schemas; Kubb 5 генерирует types, Zod schemas, Fetch methods, query keys/options и hooks.
+- OpenAPI-контракт JSON-источника матчей: GET-путь и component schemas; Kubb 5 генерирует types, Zod schemas, Fetch methods, query keys/options и hooks.
 - Явный mock-сценарий matches существующего транспорта возвращает data/matches.json (уточнение пользователя); ошибки не скрываются fallback.
 - Загрузка generated hook TanStack Query; skeleton по isLoading, ошибка с повтором и пустой экран «нет запрашиваемых матчей».
 - Фильтры «Все / Предстоящие / Завершённые» по серверному статусу.
@@ -24,7 +24,7 @@
 
 ## Impact
 
-Затрагиваются `src/screens/MatchesScreen.tsx`, `src/components/UpdatedAgo.tsx`, узкая логика загрузки и представления матчей в `src/`, `SOLUTION.md`. Дополнительно меняются App.tsx (QueryClientProvider), OpenAPI paths/component schemas, generated output и публичные экспорты @repo/api, профильные API README. Значение MATCHES_URL и исходные данные не меняются. Роутер и новые runtime-зависимости не требуются. Избранное и другие части README не входят в эту фичу.
+Затрагиваются `src/screens/MatchesScreen.tsx`, `src/components/UpdatedAgo.tsx`, узкая логика загрузки и представления матчей в `src/`, `SOLUTION.md`. Дополнительно меняются App.tsx (QueryClientProvider), OpenAPI paths/component schemas, generated output и публичные экспорты @repo/api, профильные API README. Неиспользуемый src/config.ts удаляется, конфигурация сервера/mock-режима переносится в env. Исходные данные не меняются. Роутер и новые runtime-зависимости не требуются. Избранное и другие части README не входят в эту фичу.
 
 ## Quality impact
 

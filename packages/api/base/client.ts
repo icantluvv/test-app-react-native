@@ -11,9 +11,16 @@ export { setOnUnauthorized } from './client-handlers'
 export { ResponseError } from './codegen/.kubb/client'
 export type { RequestConfig, ClientConfig, TransportResult } from './codegen/.kubb/client'
 
-// Import the package public API before consuming generated hooks: this configures
-// their default client as well as direct operation calls. No env lookup at import.
-generatedClient.setConfig({ ...generatedClient.getConfig(), transport: createExpoTransport() })
+const mockMode = process.env.EXPO_PUBLIC_API_MOCK_MODE === 'true'
+
+// Configure the shared generated client once. Mock routes match method/path only.
+generatedClient.setConfig({
+	...generatedClient.getConfig(),
+	baseURL: mockMode ? 'https://mock.example.test' : process.env.EXPO_PUBLIC_API_URL,
+	transport: createExpoTransport(
+		mockMode ? { mockScenario: 'matches', mockFallbackScenario: false } : {},
+	),
+})
 export const client = generatedClient
 
 export function createApiClient(

@@ -7,8 +7,9 @@ and MatchesResponse are reusable component schemas. The source has no server-sid
 filter parameters. Error responses do not assume a JSON body.
 
 The app currently selects the explicit `matches` mock scenario using
-`data/matches.json`. MATCHES_URL remains the configured request address; the
-placeholder OWNER/REPO does not provide a working remote source.
+`data/matches.json`, enabled by EXPO_PUBLIC_API_MOCK_MODE=true in .env.
+Mock routes match method/path independently of the host. For network mode set
+EXPO_PUBLIC_API_URL and disable mock mode; the document path remains in OpenAPI.
 
 Run from the repository root:
 

@@ -6,7 +6,7 @@
 
 ### Requirement: Remote loading and recovery
 
-Экран SHALL запрашивать матчи по настроенному MATCHES_URL при открытии, показывать skeleton карточек по isLoading generated hook TanStack Query до первого результата и сообщение с кнопкой «Повторить» при сетевой, HTTP-ошибке или некорректном ответе. По уточнению пользователя экран SHALL использовать явный mock-сценарий matches существующего транспорта с данными data/matches.json. Ошибки SHALL NOT скрываться fallback-успехом.
+Экран SHALL запрашивать матчи через generated hook и общий клиент с настройкой сервера/mock-режима из env при открытии, показывать skeleton карточек по isLoading generated hook TanStack Query до первого результата и сообщение с кнопкой «Повторить» при сетевой, HTTP-ошибке или некорректном ответе. По уточнению пользователя экран SHALL использовать явный mock-сценарий matches существующего транспорта с данными data/matches.json. Ошибки SHALL NOT скрываться fallback-успехом.
 
 #### Scenario: Initial loading and success
 
@@ -116,11 +116,11 @@ SOLUTION.md SHALL кратко объяснять распределение liv
 
 ### Requirement: Generated matches query
 
-Контракт SHALL описывать существующий GET источника MATCHES_URL через OpenAPI path и переиспользуемые component schemas. Kubb 5 SHALL генерировать types, Zod schemas, Fetch methods, query keys/options и hooks. Экран SHALL использовать generated hook через @repo/api и стабильный QueryClientProvider. Фильтры SHALL применяться локально к данным той же query без неподдерживаемых серверных параметров.
+Контракт SHALL описывать существующий GET JSON-источника матчей через OpenAPI path и переиспользуемые component schemas. Kubb 5 SHALL генерировать types, Zod schemas, Fetch methods, query keys/options и hooks. Экран SHALL использовать generated hook через @repo/api и стабильный QueryClientProvider. Фильтры SHALL применяться локально к данным той же query без неподдерживаемых серверных параметров.
 
 #### Scenario: Contract generation and consumption
 
 - **WHEN** контракт с GET getMatches сгенерирован и экран открывается
-- **THEN** generated hook запрашивает точный MATCHES_URL через существующий Expo transport с валидацией ответа
+- **THEN** generated hook использует общий клиент и существующий Expo transport с generated валидацией ответа; EXPO_PUBLIC_API_MOCK_MODE=true выбирает mock по method/path независимо от baseURL
 - **AND** initial load, «Обновить» и «Повторить» используют одну query; фильтры не вызывают запросов
 - **AND** повторная генерация не меняет output

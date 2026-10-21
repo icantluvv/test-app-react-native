@@ -1,29 +1,18 @@
 import type { MatchesFilter } from './matches/presentation'
 
-import { useRef, useState } from 'react'
+import { useGetMatches } from '@repo/api'
+import { useState } from 'react'
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { UpdatedAgo } from '../components/UpdatedAgo'
 import { MatchCard, MatchesSkeleton } from './matches/MatchCard'
-import { useMatches } from './matches/matches-query'
 import { MatchesEmptyState } from './matches/MatchesEmptyState'
 import { filterMatches, filters } from './matches/presentation'
 
 export function MatchesScreen() {
-	const query = useMatches()
+	const query = useGetMatches()
 	const [filter, setFilter] = useState<MatchesFilter>('all')
-	const requesting = useRef(false)
 	const matches = query.data ? filterMatches(query.data.matches, filter) : []
-
-	async function reload() {
-		if (requesting.current || query.isFetching) return
-		requesting.current = true
-		try {
-			await query.refetch({ cancelRefetch: false })
-		} finally {
-			requesting.current = false
-		}
-	}
 
 	return (
 		<FlatList
@@ -62,7 +51,7 @@ export function MatchesScreen() {
 							accessibilityRole="button"
 							disabled={query.isFetching}
 							accessibilityState={{ disabled: query.isFetching }}
-							onPress={() => void reload()}
+							onPress={() => void query.refetch({ cancelRefetch: false })}
 							style={[styles.button, query.isFetching && styles.disabled]}
 						>
 							<Text style={styles.selectedText}>

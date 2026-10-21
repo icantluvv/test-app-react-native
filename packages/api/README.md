@@ -11,16 +11,16 @@ The matches operation generates types, Zod validators, `getMatches`,
 `index.ts` exports these artifacts and the configured Expo client. Generated files
 must never be edited manually. App.tsx mounts one stable QueryClientProvider.
 
-The screen uses an isolated client with the explicit `matches` mock scenario.
-Its route returns `data/matches.json` after a 350 ms delay and passes through
-normal HTTP/schema validation. The default scenario remains empty. A request
-interceptor sets the exact MATCHES_URL because the generated hook omits `url`
-from its request config. Remove the explicit mockScenario to use the real source;
-the current OWNER/REPO placeholder is not a working backend address.
-
-Feature code adds a narrow unique-ID refinement and accepts ISO timezone offsets
-(the generated datetime validator accepts UTC only). Initial loading uses isLoading;
-refresh/retry use refetch from the same hook, isFetching and cached data.
+The screen directly calls generated `useGetMatches` using the shared client.
+The shared client reads EXPO_PUBLIC_API_MOCK_MODE. When true it uses the
+`matches` transport scenario and a technical baseURL https://mock.example.test;
+no network request is sent and routes match method/path independently of host. The generated operation supplies the document path.
+The mock returns data/matches.json after 350 ms; generated Zod validation checks
+the response. There are no handwritten schema refinements or query wrappers.
+The root .env enables mock mode. To use a real source, set
+EXPO_PUBLIC_API_MOCK_MODE=false and EXPO_PUBLIC_API_URL to its origin, then restart
+Expo. The document path remains in OpenAPI; src/config.ts is no longer needed. Initial loading uses isLoading, and refresh/retry use the hook's
+refetch with cancelRefetch=false, isFetching and cached data.
 
 ```sh
 npm run api:generate

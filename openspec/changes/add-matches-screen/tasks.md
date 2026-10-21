@@ -1,10 +1,10 @@
 ## 1. Данные и загрузка
 
 - [x] 1.1 Сверить API с Expo SDK 57 и прочитать ближайшие конфиги; проверить причину исходного дефекта UpdatedAgo по коду.
-- [x] 1.2 Описать GET источника MATCHES_URL, operationId getMatches, success/error responses, путь и component schemas Team/MatchScore/MatchStatus/Match/MatchesResponse через $ref.
-- [x] 1.3 Сгенерировать Kubb 5 types/Zod/Fetch/query keys/options/hooks и экспортировать их через @repo/api. Проверить generated validation, добавить только недостающие refinements в query error path.
-- [x] 1.4 Подключить стабильный QueryClientProvider и generated useGetMatches с точным MATCHES_URL через существующий Expo transport с явным mock-сценарием matches; проверить фактические сигнатуры, AbortSignal и query-local lifecycle по design.md.
-- [x] 1.5 Добавить чистые преобразования статуса, локального фильтра, даты и счёта на generated types, без дублирования DTO и query state.
+- [x] 1.2 Описать GET JSON-источника матчей, operationId getMatches, success/error responses, путь и component schemas Team/MatchScore/MatchStatus/Match/MatchesResponse через $ref.
+- [x] 1.3 Сгенерировать Kubb 5 types/Zod/Fetch/query keys/options/hooks и экспортировать их через @repo/api. Использовать generated validation без дополнительных handwritten schemas.
+- [x] 1.4 Подключить стабильный QueryClientProvider и generated useGetMatches через общий клиент с Expo transport и env-переключателем EXPO_PUBLIC_API_MOCK_MODE для сценария matches; проверить фактические сигнатуры, AbortSignal и query-local lifecycle по design.md.
+- [x] 1.5 Добавить чистые преобразования статуса, локального фильтра, даты и счёта на generated types, без дублирования DTO, query state и wrapper над generated hook.
 
 ## 2. Экран и время обновления
 
@@ -15,7 +15,7 @@
 
 ## 3. Проверки поведения и документация
 
-- [x] 3.1 Подготовить контролируемые ответы через существующий транспорт через явный mock-сценарий matches из data/matches.json и без изменения MATCHES_URL; не добавлять test runner без отдельного разрешения.
+- [x] 3.1 Подготовить контролируемые ответы через существующий транспорт через явный mock-сценарий matches из data/matches.json без изменения исходного JSON; не добавлять test runner без отдельного разрешения.
 - [x] 3.2 Проверить основные состояния экрана в браузере; записать результаты, runtime/timezone и ограничения источника в SOLUTION.md.
 - [ ] 3.3 Выполнить smoke в Expo Go: список, фильтры, refresh/error/retry, локальное время, фон/возврат; явно отметить недоступную платформу или непроверенный сценарий.
 - [x] 3.4 Обновить относящиеся к фиче разделы SOLUTION.md, API README и указать фактически выполненные проверки и ограничения.
