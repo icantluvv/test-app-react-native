@@ -25,7 +25,7 @@
 
 ## Impact
 
-index.ts, package.json, package-lock.json, src/hooks/useFavorites.ts, src/components/FavoriteButton.tsx, src/screens/MatchesScreen.tsx, src/screens/matches/MatchCard.tsx и SOLUTION.md. UpdatedAgo меняется только при подтверждённой регрессии в рамках описанных требований. Для native localStorage добавляется совместимый с SDK 57 expo-sqlite через npx expo install с обновлением корневого lockfile и импортом polyfill в index.ts. Дополнительно затрагиваются api/src/openapi.yaml, новый paths-файл и component schemas, generated output, публичные экспорты @repo/api и API README. Общий клиент, env и query defaults не меняются. Новые фильтры, навигация, синхронизация с backend и общий store вне scope.
+index.ts, package.json, package-lock.json, src/hooks/useFavorites.ts, src/components/FavoriteButton.tsx, src/screens/MatchesScreen.tsx, src/components/matches/MatchCard.tsx и SOLUTION.md. UpdatedAgo меняется только при подтверждённой регрессии в рамках описанных требований. Для native localStorage добавляется совместимый с SDK 57 expo-sqlite через npx expo install с обновлением корневого lockfile и импортом polyfill в index.ts. Дополнительно затрагиваются api/src/openapi.yaml, новый paths-файл и component schemas, generated output, публичные экспорты @repo/api и API README. Общий клиент, env и query defaults не меняются. Новые фильтры, навигация, синхронизация с backend и общий store вне scope.
 
 ## Quality impact
 

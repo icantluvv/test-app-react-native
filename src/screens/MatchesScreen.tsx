@@ -1,14 +1,15 @@
-import type { MatchesFilter } from './matches/presentation'
+import type { MatchesFilter } from '../components/matches/presentation'
 
 import { useGetMatches } from '@repo/api'
 import { useState } from 'react'
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 
+import { MatchCard } from '../components/matches/MatchCard'
+import { MatchesEmptyState } from '../components/matches/MatchesEmptyState'
+import { MatchesSkeleton } from '../components/matches/MatchesSkeleton'
+import { filterMatches, filters } from '../components/matches/presentation'
 import { UpdatedAgo } from '../components/UpdatedAgo'
 import { useFavorites } from '../hooks/useFavorites'
-import { MatchCard, MatchesSkeleton } from './matches/MatchCard'
-import { MatchesEmptyState } from './matches/MatchesEmptyState'
-import { filterMatches, filters } from './matches/presentation'
 
 export function MatchesScreen() {
 	const query = useGetMatches()

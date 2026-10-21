@@ -2,7 +2,7 @@ import type { Match } from '@repo/api'
 
 import { StyleSheet, Text, View } from 'react-native'
 
-import { FavoriteButton } from '../../components/FavoriteButton'
+import { FavoriteButton } from '../FavoriteButton'
 import { matchStartLabel, matchStatusLabel } from './presentation'
 
 type MatchCardProps =
@@ -52,20 +52,6 @@ export function MatchCard({ match, active, onFavoritePress, loading = false }: M
 	)
 }
 
-export function MatchesSkeleton() {
-	return (
-		<View
-			accessibilityLabel="Загрузка матчей"
-			accessibilityRole="progressbar"
-			style={styles.skeletons}
-		>
-			{[0, 1, 2].map((key) => (
-				<MatchCard key={key} loading />
-			))}
-		</View>
-	)
-}
-
 const styles = StyleSheet.create({
 	card: {
 		padding: 16,
@@ -94,7 +80,6 @@ const styles = StyleSheet.create({
 	score: { fontSize: 22, fontWeight: '700', fontVariant: ['tabular-nums'], color: '#111827' },
 	status: { flexShrink: 1, fontSize: 13, fontWeight: '600', color: '#374151' },
 	date: { fontSize: 13, color: '#6b7280' },
-	skeletons: { gap: 12 },
 	placeholder: { backgroundColor: '#e5e7eb', borderRadius: 4, color: 'transparent' },
 	statusPlaceholder: { backgroundColor: '#e5e7eb', borderRadius: 4, width: '55%' },
 	datePlaceholder: { backgroundColor: '#e5e7eb', borderRadius: 4, width: '55%' },
