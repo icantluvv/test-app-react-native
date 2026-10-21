@@ -1,8 +1,26 @@
 openapi: 3.0.3
 info:
-    title: Mobile Backend API
+    title: Matches API
     version: 0.1.0
-    description: Backend contract placeholder. Add real operations before generating queries.
-paths: {}
+    description: Read-only contract for the configured matches JSON source.
+servers:
+    - url: https://raw.githubusercontent.com
+security: []
+tags:
+    - name: Matches
+      description: Matches of the current round.
+paths:
+    /OWNER/REPO/main/data/matches.json:
+        $ref: ./paths/matches.yaml
 components:
-    schemas: {}
+    schemas:
+        Team:
+            $ref: ./components/schemas/Team.yaml
+        MatchScore:
+            $ref: ./components/schemas/MatchScore.yaml
+        MatchStatus:
+            $ref: ./components/schemas/MatchStatus.yaml
+        Match:
+            $ref: ./components/schemas/Match.yaml
+        MatchesResponse:
+            $ref: ./components/schemas/MatchesResponse.yaml

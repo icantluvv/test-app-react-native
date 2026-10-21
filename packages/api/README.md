@@ -6,12 +6,21 @@ Kubb and its plugins are development tools; they are not imported by the app.
 
 ## Current state
 
-The backend contract is empty. No business endpoints, database clients, old mocks,
-Next.js authentication, SSR adapters, or query hooks are retained. `index.ts` exports the configured Expo `client`, `createApiClient`, handlers,
-and mock types. The three files under `base/codegen/.kubb/` are freshly
-generated transport/serialization/validation helpers, with no business operations.
-After generation with real operations, export the needed generated modules here;
-never edit generated files.
+The matches operation generates types, Zod validators, `getMatches`,
+`getMatchesQueryKey`, `getMatchesQueryOptions` and `useGetMatches`. The public
+`index.ts` exports these artifacts and the configured Expo client. Generated files
+must never be edited manually. App.tsx mounts one stable QueryClientProvider.
+
+The screen uses an isolated client with the explicit `matches` mock scenario.
+Its route returns `data/matches.json` after a 350 ms delay and passes through
+normal HTTP/schema validation. The default scenario remains empty. A request
+interceptor sets the exact MATCHES_URL because the generated hook omits `url`
+from its request config. Remove the explicit mockScenario to use the real source;
+the current OWNER/REPO placeholder is not a working backend address.
+
+Feature code adds a narrow unique-ID refinement and accepts ISO timezone offsets
+(the generated datetime validator accepts UTC only). Initial loading uses isLoading;
+refresh/retry use refetch from the same hook, isFetching and cached data.
 
 ```sh
 npm run api:generate
@@ -44,7 +53,7 @@ workspace manifest; all dependencies resolve through the root package-lock.json.
 - A phone cannot reach a computer backend through `localhost`. Use a reachable
   LAN address or HTTPS development endpoint. Web requests also need correct CORS.
 
-No provider is mounted yet because the screen does not consume backend queries.
+A stable provider is mounted in App.tsx for the matches query.
 No global retry/freshness defaults are imposed without product requirements.
 
 ## Handwritten client modules

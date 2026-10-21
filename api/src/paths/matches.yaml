@@ -1,0 +1,16 @@
+get:
+    operationId: getMatches
+    summary: Get matches of the current round
+    description: Fetch the JSON document configured by MATCHES_URL. Filtering is local.
+    tags: [Matches]
+    responses:
+        '200':
+            description: Current round and matches in source order.
+            content:
+                application/json:
+                    schema:
+                        $ref: ../components/schemas/MatchesResponse.yaml
+        '404':
+            description: The configured matches document was not found.
+        default:
+            description: Source unavailable or request failed. The error body is not guaranteed to be JSON.

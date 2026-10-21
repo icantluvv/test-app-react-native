@@ -1,12 +1,14 @@
 # Backend OpenAPI contract
 
-`src/openapi.yaml` is the only source for API generation. The contract intentionally
-has no operations, application schemas, authentication scheme, or backend address.
+`src/openapi.yaml` is the source for API generation. It describes the read-only
+matches JSON document at `/OWNER/REPO/main/data/matches.json` with `getMatches`.
+The path lives in `src/paths/matches.yaml`; Team, MatchScore, MatchStatus, Match
+and MatchesResponse are reusable component schemas. The source has no server-side
+filter parameters. Error responses do not assume a JSON body.
 
-Add real endpoint definitions under `src/paths/` and reusable schemas under
-`src/components/schemas/`, then reference them from `src/openapi.yaml`. Specify
-unique `operationId` values, request parameters, success and error responses.
-Do not copy database schemas into the mobile client contract.
+The app currently selects the explicit `matches` mock scenario using
+`data/matches.json`. MATCHES_URL remains the configured request address; the
+placeholder OWNER/REPO does not provide a working remote source.
 
 Run from the repository root:
 

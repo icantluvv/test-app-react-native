@@ -1,0 +1,7 @@
+export type { GetMatchesOptions, GetMatchesResponse, GetMatchesResponses, GetMatchesStatus200, GetMatchesStatus404, GetMatchesStatusDefault } from './GetMatches'
+export type { Match } from './Match'
+export type { MatchScore } from './MatchScore'
+export type { MatchStatusKey } from './MatchStatus'
+export type { MatchesResponse } from './MatchesResponse'
+export type { Team } from './Team'
+export { matchStatus } from './MatchStatus'

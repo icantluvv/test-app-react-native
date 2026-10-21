@@ -1,0 +1,20 @@
+type: object
+required: [id, startsAt, status, home, away, score]
+properties:
+    id:
+        type: string
+    startsAt:
+        type: string
+        format: date-time
+        nullable: true
+    status:
+        $ref: ./MatchStatus.yaml
+    home:
+        $ref: ./Team.yaml
+    away:
+        $ref: ./Team.yaml
+    score:
+        $ref: ./MatchScore.yaml
+    minute:
+        type: integer
+        minimum: 0

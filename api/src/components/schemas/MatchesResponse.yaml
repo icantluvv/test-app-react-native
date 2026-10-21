@@ -1,0 +1,9 @@
+type: object
+required: [round, matches]
+properties:
+    round:
+        type: integer
+    matches:
+        type: array
+        items:
+            $ref: ./Match.yaml
