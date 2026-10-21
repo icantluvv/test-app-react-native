@@ -61,10 +61,10 @@ export function MatchesScreen() {
 						{query.isFetching && !query.isLoading ? (
 							<ActivityIndicator accessibilityLabel="Обновление матчей" />
 						) : null}
+						{query.data !== undefined && (
+							<UpdatedAgo since={new Date(query.dataUpdatedAt)} />
+						)}
 					</View>
-					{query.data !== undefined && (
-						<UpdatedAgo since={new Date(query.dataUpdatedAt)} />
-					)}
 					{query.isError && (
 						<Text selectable accessibilityRole="alert" style={styles.error}>
 							{query.data === undefined

@@ -4,25 +4,37 @@ import { StyleSheet, Text, View } from 'react-native'
 
 import { matchStartLabel, matchStatusLabel } from './presentation'
 
-export function MatchCard({ match }: { match: Match }) {
+type MatchCardProps = { match: Match; loading?: false } | { match?: never; loading: true }
+
+export function MatchCard({ match, loading = false }: MatchCardProps) {
 	return (
-		<View style={styles.card}>
-			<Text selectable style={styles.status}>
-				{matchStatusLabel(match)}
+		<View style={styles.card} aria-hidden={loading}>
+			<Text
+				selectable={!loading}
+				style={[styles.status, loading && styles.statusPlaceholder]}
+			>
+				{match ? matchStatusLabel(match) : '\u00a0'}
 			</Text>
 			<View style={styles.teams}>
-				<Text selectable style={styles.team}>
-					{match.home.name}
+				<Text selectable={!loading} style={[styles.team, loading && styles.placeholder]}>
+					{match?.home.name ?? '\u00a0'}
 				</Text>
-				<Text selectable style={styles.score}>
-					{match.score === null ? '—' : `${match.score.home}:${match.score.away}`}
+				<Text selectable={!loading} style={[styles.score, loading && styles.placeholder]}>
+					{match
+						? match.score === null
+							? '—'
+							: `${match.score.home}:${match.score.away}`
+						: '0:0'}
 				</Text>
-				<Text selectable style={[styles.team, styles.away]}>
-					{match.away.name}
+				<Text
+					selectable={!loading}
+					style={[styles.team, styles.away, loading && styles.placeholder]}
+				>
+					{match?.away.name ?? '\u00a0'}
 				</Text>
 			</View>
-			<Text selectable style={styles.date}>
-				{matchStartLabel(match.startsAt)}
+			<Text selectable={!loading} style={[styles.date, loading && styles.datePlaceholder]}>
+				{match ? matchStartLabel(match.startsAt) : '\u00a0'}
 			</Text>
 		</View>
 	)
@@ -36,11 +48,7 @@ export function MatchesSkeleton() {
 			style={styles.skeletons}
 		>
 			{[0, 1, 2].map((key) => (
-				<View key={key} style={styles.card}>
-					<View style={[styles.placeholder, styles.short]} />
-					<View style={styles.placeholder} />
-					<View style={[styles.placeholder, styles.short]} />
-				</View>
+				<MatchCard key={key} loading />
 			))}
 		</View>
 	)
@@ -62,6 +70,7 @@ const styles = StyleSheet.create({
 	status: { fontSize: 13, fontWeight: '600', color: '#374151' },
 	date: { fontSize: 13, color: '#6b7280' },
 	skeletons: { gap: 12 },
-	placeholder: { height: 20, backgroundColor: '#e5e7eb', borderRadius: 4 },
-	short: { width: '55%', height: 14 },
+	placeholder: { backgroundColor: '#e5e7eb', borderRadius: 4, color: 'transparent' },
+	statusPlaceholder: { backgroundColor: '#e5e7eb', borderRadius: 4, width: '55%' },
+	datePlaceholder: { backgroundColor: '#e5e7eb', borderRadius: 4, width: '55%' },
 })
