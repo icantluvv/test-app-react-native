@@ -1,14 +1,14 @@
 {
-  "name": "@repo/api-spec",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "bundle": "redocly bundle",
-    "lint": "redocly lint",
-    "fmt": "oxfmt"
-  },
-  "devDependencies": {
-    "@redocly/cli": "2.34.0",
-    "oxfmt": "0.56.0"
-  }
+	"name": "@repo/api-spec",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"bundle": "redocly bundle",
+		"fmt": "oxfmt",
+		"lint": "redocly lint"
+	},
+	"devDependencies": {
+		"@redocly/cli": "2.34.0",
+		"oxfmt": "0.56.0"
+	}
 }

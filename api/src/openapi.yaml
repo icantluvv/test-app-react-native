@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Mobile Backend API
-  version: 0.1.0
-  description: Backend contract placeholder. Add real operations before generating queries.
+    title: Mobile Backend API
+    version: 0.1.0
+    description: Backend contract placeholder. Add real operations before generating queries.
 paths: {}
 components:
-  schemas: {}
+    schemas: {}

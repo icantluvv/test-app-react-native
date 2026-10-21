@@ -1,34 +1,37 @@
 {
-  "name": "matches-task",
-  "version": "1.0.0",
-  "private": true,
-  "workspaces": [
-    "api",
-    "packages/api"
-  ],
-  "main": "index.ts",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "typecheck": "tsc --noEmit",
-    "api:lint": "npm run lint --workspace=@repo/api-spec",
-    "api:bundle": "npm run bundle --workspace=@repo/api-spec",
-    "api:generate": "npm run generate --workspace=@repo/api"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "5.104.5",
-    "expo": "~57.0.29",
-    "expo-status-bar": "~57.0.1",
-    "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "react-native": "0.86.3",
-    "react-native-web": "^0.21.2",
-    "zod": "4.6.7"
-  },
-  "devDependencies": {
-    "@types/react": "~19.2.2",
-    "typescript": "~6.0.3"
-  }
+	"name": "matches-task",
+	"version": "1.0.0",
+	"private": true,
+	"workspaces": [
+		"api",
+		"packages/api"
+	],
+	"main": "index.ts",
+	"scripts": {
+		"android": "expo start --android",
+		"api:bundle": "npm run bundle --workspace=@repo/api-spec",
+		"api:generate": "npm run generate --workspace=@repo/api",
+		"api:lint": "npm run lint --workspace=@repo/api-spec",
+		"format": "oxfmt .",
+		"format:check": "oxfmt --check .",
+		"ios": "expo start --ios",
+		"start": "expo start",
+		"typecheck": "tsc --noEmit",
+		"web": "expo start --web"
+	},
+	"dependencies": {
+		"@tanstack/react-query": "5.104.5",
+		"expo": "~57.0.29",
+		"expo-status-bar": "~57.0.1",
+		"react": "19.2.3",
+		"react-dom": "19.2.3",
+		"react-native": "0.86.3",
+		"react-native-web": "^0.21.2",
+		"zod": "4.6.7"
+	},
+	"devDependencies": {
+		"@types/react": "~19.2.2",
+		"oxfmt": "0.56.0",
+		"typescript": "~6.0.3"
+	}
 }

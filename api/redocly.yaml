@@ -1,10 +1,10 @@
 extends:
-  - recommended
+    - recommended
 apis:
-  backend@v1:
-    root: ./src/openapi.yaml
-    output: ./dist/openapi.yaml
+    backend@v1:
+        root: ./src/openapi.yaml
+        output: ./dist/openapi.yaml
 # Placeholder contract: set a real server and license when the backend is known.
 rules:
-  no-empty-servers: off
-  info-license: off
+    no-empty-servers: off
+    info-license: off
